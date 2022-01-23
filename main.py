@@ -21,7 +21,7 @@ def make_report():
     token = ui.webhook.text()
     month = int(ui.month.text())
     month_rus = ('январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль',
-                 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь')[month - 1]
+                 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь')[month - 1].capitalize()
     year = int(ui.year.text())
     working = ui.working_emp.isChecked()
     fired = ui.fired_emp.isChecked()
@@ -94,8 +94,10 @@ def make_report():
     current_month = time.localtime().tm_mon
     current_year = time.localtime().tm_year
     current_dep = ""
-
+    # k = 0
     for user_id in sorted_users:
+        # k += 1
+        # if k < 5 or k > 10: continue
         try:
             name = users[user_id]['name']
             ui.status.setText(f"Получение: {name}")
@@ -148,7 +150,7 @@ def make_report():
                 data_sheet.append(row)
             ui.status_bar.setProperty("value", ui.status_bar.value() + pbar_step)
         except Exception as e:
-            ui.status.setText("Ошибка!", str(e))
+            ui.status.setText(f"Ошибка! {str(e)}")
             ui.status.adjustSize()
             app.processEvents()
             time.sleep(5)
@@ -157,11 +159,28 @@ def make_report():
     if not os.path.exists("./Отчёты"):
         os.mkdir("./Отчёты")
 
-    # TODO АВТОНАСТРОЙКА ШИРИНЫ СТОЛБЦОВ
+    # Автонастройка ширины ячеек
+    dims = {}
+    for row in data_sheet.rows:
+        for cell in row:
+            if cell.value:
+                dims[cell.column_letter] = max((dims.get(cell.column_letter, 0), len(str(cell.value))))
+    for col, value in dims.items():
+        data_sheet.column_dimensions[col].width = value + 5
+    try:
+        wb.save("./Отчёты/" + f"Отчёт эффективности за {month_rus} {year}.xlsx")
+        ui.status.setText("Запись данных в таблицу эксель....Успех")
+        ui.status_bar.setProperty("value", 100)
+    except Exception as e:
+        ui.status.setText(f"Ошибка при сохранении файла! {str(e)}")
+        ui.status.adjustSize()
+        app.processEvents()
+        wb.save(f"backup {time.time()}.xlsx")
+        time.sleep(5)
+        ui.status.setText(f"Ошибка при сохранении. Файл сохранён как backup.")
+        ui.status.adjustSize()
+        app.processEvents()
 
-    wb.save("./Отчёты/" + f"Отчёт эффективности за {month_rus} {year}.xlsx")
-    ui.status.setText("Запись данных в таблицу эксель....Успех")
-    ui.status_bar.setProperty("value", 100)
 
 
 def start():
