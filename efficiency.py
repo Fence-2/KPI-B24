@@ -23,7 +23,7 @@ class Efficiency:
         if response.ok:
             if "Неверный логин или пароль." in response.text:
                 print("Неверный логин или пароль.")
-                exit()
+                self.session = None
             else:
                 print("Успешный логин")
 

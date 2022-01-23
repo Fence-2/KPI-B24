@@ -56,35 +56,51 @@ def make_report():
         return 1
 
     # Авторизация и получение сессии
-    ui.status.setText("Авторизация..")
-    ui.status.adjustSize()
-    efficiency = Efficiency(login, password)
+    try:
+        ui.status.setText("Авторизация..")
+        ui.status.adjustSize()
+        efficiency = Efficiency(login, password)
+        if efficiency.session is None:
+            raise Exception
 
-    ui.status_bar.setProperty("value", 1)
-    ui.status.setText("Авторизация....Успех")
-    ui.status.adjustSize()
+        ui.status_bar.setProperty("value", 1)
+        ui.status.setText("Авторизация....Успех")
+        ui.status.adjustSize()
+    except Exception as e:
+        QtWidgets.QMessageBox.information(Form, "Неверный логин или пароль", f"Ошибка с авторизацией.\n"
+                                                                  f"Неверный логин или пароль.\n")
+        enable_ui()
+        return 1
 
     # Получение списка департаментов и сотрудников
-    crm = Bitrix(token)
+    try:
+        crm = Bitrix(token)
 
-    ui.status.setText("Получение департаментов..")
-    ui.status.adjustSize()
+        ui.status.setText("Получение департаментов..")
+        ui.status.adjustSize()
 
-    deps = crm.get_departments()
+        deps = crm.get_departments()
 
-    ui.status_bar.setProperty("value", 6)
-    ui.status.setText("Получение департаментов....Успех")
-    ui.status.adjustSize()
+        ui.status_bar.setProperty("value", 6)
+        ui.status.setText("Получение департаментов....Успех")
+        ui.status.adjustSize()
 
-    ui.status.setText("Получение сотрудников..")
-    ui.status.adjustSize()
+        ui.status.setText("Получение сотрудников..")
+        ui.status.adjustSize()
 
-    users = crm.get_employees(working=working, fired=fired)
+        users = crm.get_employees(working=working, fired=fired)
 
-    ui.status_bar.setProperty("value", 10)
-    ui.status.setText("Получение сотрудников....Успех")
-    ui.status.setText("Подбор департаментов по словарю..")
-    ui.status.adjustSize()
+        ui.status_bar.setProperty("value", 10)
+        ui.status.setText("Получение сотрудников....Успех")
+        ui.status.setText("Подбор департаментов по словарю..")
+        ui.status.adjustSize()
+    except Exception as e:
+        QtWidgets.QMessageBox.information(Form, "Неверный токен", f"Ошибка с токеном.\n"
+                                                                  f"Не удалось получить список сотрудников и отделов.\n"
+                                                                  f"Ошибка: {str(e)}")
+        config.set(login, password, "")
+        enable_ui()
+        return 1
     try:
         for user_id in users.values():
             if user_id["deps"] in deps.keys():

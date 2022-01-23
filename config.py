@@ -20,8 +20,8 @@ def get():
 
 
 def set(login="", password="", webhook=""):
-    if not os.path.exists("./config"):
-        os.mkdir("./config")
+    if not os.path.exists("./Config"):
+        os.mkdir("./Config")
 
     config = configparser.ConfigParser()
     config[service_url] = {
