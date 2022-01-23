@@ -33,7 +33,6 @@ def make_report():
     # Авторизация и получение сессии
     ui.status.setText("Авторизация..")
     ui.status.adjustSize()
-
     efficiency = Efficiency(login, password)
 
     ui.status_bar.setProperty("value", 1)
@@ -171,6 +170,7 @@ def make_report():
         wb.save("./Отчёты/" + f"Отчёт эффективности за {month_rus} {year}.xlsx")
         ui.status.setText("Запись данных в таблицу эксель....Успех")
         ui.status_bar.setProperty("value", 100)
+        QtWidgets.QMessageBox.information(Form, "Успех!", "Отчёт создан в папке \"Отчёты\".")
     except Exception as e:
         ui.status.setText(f"Ошибка при сохранении файла! {str(e)}")
         ui.status.adjustSize()
@@ -180,8 +180,7 @@ def make_report():
         ui.status.setText(f"Ошибка при сохранении. Файл сохранён как backup.")
         ui.status.adjustSize()
         app.processEvents()
-
-
+        QtWidgets.QMessageBox.information(Form, "Что-то пошло не так...", "Ошибка! Отчёт сохранён как backup.xlsx")
 
 def start():
     # Запись данных из конфига в UI
