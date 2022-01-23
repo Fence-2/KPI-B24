@@ -122,6 +122,11 @@ class Ui_Form(object):
         self.create_report_button.setObjectName("create_report_button")
         self.verticalLayout_2.addWidget(self.create_report_button)
 
+        self.label_copyright = QtWidgets.QLabel(Form)
+        self.label_copyright.setObjectName("label_5")
+        self.label_copyright.setStyleSheet("color: grey; font-style: italic;")
+        self.verticalLayout_2.addWidget(self.label_copyright)
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -135,5 +140,6 @@ class Ui_Form(object):
         self.working_emp.setText(_translate("Form", "Работающие сотрудники"))
         self.fired_emp.setText(_translate("Form", "Уволенные сотрудники"))
         self.label_5.setText(_translate("Form", "Параметры"))
+        self.label_copyright.setText(_translate("Form", "@Made by Dmitrii Chistyakov"))
         self.create_report_button.setText(_translate("Form", "Сформировать отчёт"))
 
