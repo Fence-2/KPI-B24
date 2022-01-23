@@ -6,7 +6,7 @@ pyinstaller --workpath=.\Temp ^
 	--specpath=.\Temp ^
 	--distpath=.\Build ^
 	--name "Program" ^
-	--onefile main.py
+	--onefile --windowed main.py
 
 rmdir /s /q __pycache__
 rmdir /s /q Temp
