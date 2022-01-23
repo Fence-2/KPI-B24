@@ -14,7 +14,32 @@ ui = Ui_Form()
 ui.setupUi(Form)
 
 
+def disable_ui():
+    ui.login.setEnabled(False)
+    ui.password.setEnabled(False)
+    ui.webhook.setEnabled(False)
+    ui.month.setEnabled(False)
+    ui.year.setEnabled(False)
+    ui.working_emp.setEnabled(False)
+    ui.fired_emp.setEnabled(False)
+    ui.create_report_button.setEnabled(False)
+    app.processEvents()
+
+
+def enable_ui():
+    ui.login.setEnabled(True)
+    ui.password.setEnabled(True)
+    ui.webhook.setEnabled(True)
+    ui.month.setEnabled(True)
+    ui.year.setEnabled(True)
+    ui.working_emp.setEnabled(True)
+    ui.fired_emp.setEnabled(True)
+    ui.create_report_button.setEnabled(True)
+    app.processEvents()
+
+
 def make_report():
+    disable_ui()
     # Получение параметров с UI
     login = ui.login.text()
     password = ui.password.text()
@@ -60,7 +85,6 @@ def make_report():
     ui.status.setText("Получение сотрудников....Успех")
     ui.status.setText("Подбор департаментов по словарю..")
     ui.status.adjustSize()
-
     try:
         for user_id in users.values():
             if user_id["deps"] in deps.keys():
@@ -181,6 +205,9 @@ def make_report():
         ui.status.adjustSize()
         app.processEvents()
         QtWidgets.QMessageBox.information(Form, "Что-то пошло не так...", "Ошибка! Отчёт сохранён как backup.xlsx")
+    finally:
+        enable_ui()
+
 
 def start():
     # Запись данных из конфига в UI
