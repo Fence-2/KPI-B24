@@ -161,7 +161,7 @@ def make_report():
             else:
                 result = efficiency.by_month(month, year, user_id)
                 if result != "Нет доступа":
-                    result = result.json()["DATA"]["op_0"]["RESULT"]
+                    result = result.json()["data"]
                     result = dict(
                         zip(["Эффективность", "Завершено задач", "Замечаний", "Всего в работе", "График", "DEL"],
                             result.values()))

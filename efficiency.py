@@ -77,20 +77,29 @@ class Efficiency:
             print("Установка фильтра прошла с ошибкой. Данные могут быть неверны!")
 
         # Запрос на получение данных эффективности по фильтру
-        efficiency_form = {
-            'sessid': [sessid],
-            'SITE_ID': ['s1'],
-            'EMMITER': [emmiter],
-            'ACTION[0][OPERATION]': ['tasksreporteffectivecomponent.getEfficiencyData'],
-            'ACTION[0][ARGUMENTS][DATETIME_datesel]': ['MONTH'],
-            'ACTION[0][ARGUMENTS][DATETIME_month]': [month],
-            'ACTION[0][ARGUMENTS][DATETIME_year]': [year],
-            'ACTION[0][ARGUMENTS][userId]': [userid],
-            'ACTION[0][PARAMETERS][code]': ['op_0']}
+        # efficiency_form = {
+        #     'sessid': [sessid],
+        #     'SITE_ID': ['s1'],
+        #     'EMMITER': [emmiter],
+        #     'ACTION[0][OPERATION]': ['tasksreporteffectivecomponent.getEfficiencyData'],
+        #     'ACTION[0][ARGUMENTS][DATETIME_datesel]': ['MONTH'],
+        #     'ACTION[0][ARGUMENTS][DATETIME_month]': [month],
+        #     'ACTION[0][ARGUMENTS][DATETIME_year]': [year],
+        #     'ACTION[0][ARGUMENTS][userId]': [userid],
+        #     'ACTION[0][PARAMETERS][code]': ['op_0']}
 
-        response = self.session.post(
-            "https://crm.galtsystems.ru/bitrix/components/bitrix/tasks.report.effective/ajax.php",
-            headers=self.headers, data=efficiency_form)
+        efficiency_form_params = {
+            'mode': ['class'],
+            'c': ['bitrix:tasks.report.effective'],
+            'action': ['getEfficiencyData'],
+        }
+
+        efficiency_form_data = {
+            'userId': [userid, ]
+        }
+
+        response = self.session.post('https://crm.galtsystems.ru/bitrix/services/main/ajax.php',
+                                     headers=self.headers, params=efficiency_form_params, data=efficiency_form_data)
 
         return response
 
